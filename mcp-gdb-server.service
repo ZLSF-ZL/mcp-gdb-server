@@ -1,0 +1,15 @@
+[Unit]
+Description=MCP GDB Server
+Documentation=https://github.com/your-org/mcp-gdb-server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mcp_gdb_server
+Restart=always
+RestartSec=5
+Environment=MCP_HOST=0.0.0.0
+Environment=MCP_PORT=8000
+
+[Install]
+WantedBy=multi-user.target

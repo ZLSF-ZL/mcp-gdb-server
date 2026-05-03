@@ -1,0 +1,2 @@
+fastmcp>=0.2.0
+pexpect>=4.9.0
