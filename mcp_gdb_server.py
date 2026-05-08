@@ -52,18 +52,27 @@ def main() -> None:
         default=None,
         help=f"listen port (default: {DEFAULT_PORT}, env: MCP_PORT)",
     )
+    parser.add_argument(
+        "--transport",
+        choices=["sse", "stdio"],
+        default="sse",
+        help="transport protocol (default: sse)",
+    )
     args = parser.parse_args()
 
     host = os.environ.get("MCP_HOST", "0.0.0.0")
     port = args.port or int(os.environ.get("MCP_PORT", str(DEFAULT_PORT)))
 
     try:
-        mcp.run(
-            transport="sse",
-            host=host,
-            port=port,
-            uvicorn_config={"log_config": _LOG_CONFIG},
-        )
+        if args.transport == "stdio":
+            mcp.run(transport="stdio")
+        else:
+            mcp.run(
+                transport="sse",
+                host=host,
+                port=port,
+                uvicorn_config={"log_config": _LOG_CONFIG},
+            )
     except KeyboardInterrupt:
         sys.exit(0)
 

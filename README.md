@@ -32,7 +32,11 @@ MCP_HOST=127.0.0.1 MCP_PORT=9000 python mcp_gdb_server.py
 
 ## 客户端配置
 
-在支持 MCP 的客户端（如 VS Code、Cursor、Claude Code 等）中，添加以下 SSE 配置连接到本服务：
+在支持 MCP 的客户端（如 VS Code、Cursor、Claude Code 等）中，根据运行方式选择对应配置。
+
+### 方式一：连接已运行的服务（SSE）
+
+服务已通过 systemd 或手动启动，客户端直接连接：
 
 ```json
 {
@@ -42,6 +46,20 @@ MCP_HOST=127.0.0.1 MCP_PORT=9000 python mcp_gdb_server.py
   "disabled": false
 }
 ```
+
+### 方式二：从源码自动启动（Stdio）
+
+客户端自动从项目目录启动 `mcp_gdb_server.py`：
+
+```json
+{
+  "type": "stdio",
+  "command": "python",
+  "args": ["mcp_gdb_server.py", "--transport", "stdio"]
+}
+```
+
+> **提示**：Claude Code 可将方式二配置在项目 `.claude/settings.json` 中（仅本项目生效），方式一配置在全局设置（其余项目生效），两者共存互不干扰。
 
 ## 编译为独立可执行文件
 
