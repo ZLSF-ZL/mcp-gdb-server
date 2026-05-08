@@ -9,7 +9,6 @@
 - **启动调试会话** — 支持本地调试、附加进程 (gdb -p)、远程调试 (target remote)
 - **发送 GDB 命令** — 交互式执行任意 GDB 命令（break, step, print 等）
 - **中断运行** — 向正在运行的程序发送 SIGINT/Ctrl+C
-- **Shell 命令** — 在宿主机上执行系统命令辅助调试
 
 ## 快速开始
 
@@ -102,22 +101,69 @@ sudo ./uninstall_service.sh
 
 ## MCP 工具
 
+### 生命周期
+
 | 工具 | 描述 |
 |------|------|
 | `start_debugging` | 启动 GDB 调试会话 |
-| `send_gdb_command` | 向 GDB 发送命令或向程序输入 |
+| `send_gdb_command` | 向 GDB 发送原始命令或向程序输入 |
 | `interrupt` | 中断正在运行的程序 |
 | `stop_debugging` | 终止 GDB 会话 |
-| `run_shell_command` | 执行宿主机 Shell 命令 |
+
+### 断点管理
+
+| 工具 | 描述 |
+|------|------|
+| `set_breakpoint` | 设置断点，支持条件断点和一次性断点（tbreak） |
+| `delete_breakpoint` | 按编号删除断点/监视点 |
+| `list_breakpoints` | 列出所有断点、监视点、捕获点 |
+| `enable_breakpoint` | 启用断点 |
+| `disable_breakpoint` | 禁用断点 |
+
+### 执行控制
+
+| 工具 | 描述 |
+|------|------|
+| `step_into` | 单步进入（stepi） |
+| `step_over` | 单步跳过（next） |
+| `step_out` | 执行到当前函数返回（finish） |
+| `continue_execution` | 继续执行 |
+
+### 状态查看
+
+| 工具 | 描述 |
+|------|------|
+| `read_registers` | 读取寄存器值，返回结构化字典 |
+| `backtrace` | 打印调用栈，支持显示局部变量 |
+| `evaluate` | 求值 GDB 表达式（print） |
+
+### 内存与反汇编
+
+| 工具 | 描述 |
+|------|------|
+| `read_memory` | 按指定格式读取内存（hex、decimal、string、instr） |
+| `search_memory` | 在内存范围中搜索值（find） |
+| `disassemble` | 反汇编指定地址附近的指令 |
+
+### 监视点
+
+| 工具 | 描述 |
+|------|------|
+| `set_watchpoint` | 设置硬件监视点（write/read/access） |
 
 ## 典型用法
 
 ```
 1. start_debugging(command="gdb ./challenge")
-2. send_gdb_command(command="break main")
+2. set_breakpoint(location="main")
 3. send_gdb_command(command="run")
-4. send_gdb_command(command="info registers")
-5. send_gdb_command(command="x/32gx $rsp")
+4. send_gdb_command(command="r < input.txt")
+5. read_registers()                    # 结构化寄存器字典
+6. read_memory(address="$rsp", count=32)  # 结构化内存
+7. backtrace()                         # 结构化调用栈
+8. disassemble(address="$rip")         # 结构化反汇编
+9. evaluate(expression="'A'*8")        # 结构化表达式求值
+10. set_watchpoint(expression="rbp-8", kind="write")
 ```
 
 ## 项目结构
