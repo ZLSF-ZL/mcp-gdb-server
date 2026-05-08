@@ -17,14 +17,32 @@
 # 安装依赖
 pip install -r requirements.txt
 
-# 开发模式启动
-python -m mcp_gdb_server
+# 开发模式启动（单文件入口，推荐）
+python mcp_gdb_server.py
+
+# 指定端口
+python mcp_gdb_server.py 9000
 
 # 或通过环境变量指定地址
-MCP_HOST=127.0.0.1 MCP_PORT=9000 python -m mcp_gdb_server
+MCP_HOST=127.0.0.1 MCP_PORT=9000 python mcp_gdb_server.py
 ```
 
 服务器默认在 `http://0.0.0.0:8000` 监听 SSE 传输。
+
+> 也可以通过包模式启动（效果相同）：`python -m mcp_gdb_server`
+
+## 客户端配置
+
+在支持 MCP 的客户端（如 VS Code、Cursor、Claude Code 等）中，添加以下 SSE 配置连接到本服务：
+
+```json
+{
+  "type": "sse",
+  "url": "http://127.0.0.1:8000/sse",
+  "timeout": 1800,
+  "disabled": false
+}
+```
 
 ## 编译为独立可执行文件
 
@@ -106,16 +124,17 @@ sudo ./uninstall_service.sh
 
 ```
 mcp-gdb-server/
-├── mcp_gdb_server/          # Python 包
-│   ├── __init__.py          # FastMCP 应用创建与组件装配
-│   ├── manager.py           # GDBManager — GDB 进程管理
-│   ├── tools.py             # MCP 工具注册
-│   └── __main__.py          # 入口点 (python -m mcp_gdb_server)
-├── run.py                   # PyInstaller 编译入口
-├── build.py                 # PyInstaller 编译脚本
-├── mcp-gdb-server.service   # systemd 服务单元
-├── install_service.sh       # 服务一键安装
-├── uninstall_service.sh     # 服务一键卸载
+├── mcp_gdb_server.py          # 单文件 CLI 入口（推荐）
+├── mcp_gdb_server/            # Python 包
+│   ├── __init__.py            # FastMCP 应用创建与组件装配
+│   ├── manager.py             # GDBManager — GDB 进程管理
+│   ├── tools.py               # MCP 工具注册
+│   └── __main__.py            # 入口点 (python -m mcp_gdb_server)
+├── run.py                     # PyInstaller 编译入口
+├── build.py                   # PyInstaller 编译脚本
+├── mcp-gdb-server.service     # systemd 服务单元
+├── install_service.sh         # 服务一键安装
+├── uninstall_service.sh       # 服务一键卸载
 ├── requirements.txt
 └── README.md
 ```
