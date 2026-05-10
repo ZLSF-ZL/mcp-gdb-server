@@ -29,9 +29,24 @@ def register_tools(mcp: FastMCP, gdb: GDBManager) -> None:
 
     @mcp.tool()
     @_wrap
-    def start_debugging(command: str = "gdb") -> str:
-        """Start a new GDB debugging session. Supports local, attach-pid, and remote modes."""
+    def start_debugging(command: str = "") -> str:
+        """Start a new GDB debugging session.
+
+        When *command* is empty, auto-detects the best available GDB
+        (gdb-multiarch > gdb).  Use ``detect_gdb`` to list what's found.
+        """
+        if not command.strip():
+            command = gdb.pick_gdb()
         return gdb.start(command)
+
+    @mcp.tool()
+    @_wrap
+    def detect_gdb() -> dict:
+        """Probe the system PATH for available GDB binaries.
+
+        Returns a dict like ``{"gdb-multiarch": "/usr/bin/gdb-multiarch", "gdb": "/usr/bin/gdb"}``.
+        """
+        return {"status": "ok", "data": GDBManager.detect_gdb(), "raw": ""}
 
     @mcp.tool()
     @_wrap

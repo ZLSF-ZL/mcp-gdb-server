@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import shutil
 from typing import Optional
 
 import pexpect
@@ -45,6 +46,24 @@ class GDBManager:
     @property
     def is_running(self) -> bool:
         return self._child is not None and self._child.isalive()
+
+    # ── GDB detection ────────────────────────────────────────────────
+
+    @staticmethod
+    def detect_gdb() -> dict[str, str]:
+        """Probe the system PATH for available GDB binaries."""
+        found: dict[str, str] = {}
+        for name in ["gdb-multiarch", "gdb", "pwndbg", "gef", "peda"]:
+            path = shutil.which(name)
+            if path:
+                found[name] = path
+        return found
+
+    @staticmethod
+    def pick_gdb() -> str:
+        """Return the most capable GDB binary available on the system."""
+        detected = GDBManager.detect_gdb()
+        return detected.get("gdb-multiarch") or detected.get("gdb") or "gdb"
 
     # ── lifecycle ────────────────────────────────────────────────────
 

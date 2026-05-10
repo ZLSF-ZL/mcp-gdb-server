@@ -8,7 +8,12 @@
 
 - **启动调试会话** — 支持本地调试、附加进程 (gdb -p)、远程调试 (target remote)
 - **发送 GDB 命令** — 交互式执行任意 GDB 命令（break, step, print 等）
-- **中断运行** — 向正在运行的程序发送 SIGINT/Ctrl+C
+	- **GDB 自动探测** — 自动选用 gdb-multiarch 或 gdb
+- **断点管理** — 设置、删除、启用、禁用断点，支持条件断点
+- **执行控制** — stepi、next、finish、continue
+- **寄存器与内存** — 结构化读取寄存器、内存、反汇编
+- **调用栈查看** — backtrace 支持显示局部变量
+- **表达式求值** — 调试中动态求值
 
 ## 快速开始
 
@@ -55,7 +60,7 @@ MCP_HOST=127.0.0.1 MCP_PORT=9000 python mcp_gdb_server.py
 {
   "type": "stdio",
   "command": "python",
-  "args": ["<You clone the local address of the project>/mcp_gdb_server.py", "--transport", "stdio"]
+  "args": ["mcp_gdb_server.py", "--transport", "stdio"]
 }
 ```
 
@@ -122,7 +127,8 @@ sudo ./uninstall_service.sh
 
 | 工具 | 描述 |
 |------|------|
-| `start_debugging` | 启动 GDB 调试会话 |
+| `start_debugging` | 启动 GDB 调试会话，留空自动选择最佳 GDB |
+| `detect_gdb` | 探测系统上可用的 GDB 二进制 |
 | `send_gdb_command` | 向 GDB 发送原始命令或向程序输入 |
 | `interrupt` | 中断正在运行的程序 |
 | `stop_debugging` | 终止 GDB 会话 |
@@ -171,16 +177,17 @@ sudo ./uninstall_service.sh
 ## 典型用法
 
 ```
-1. start_debugging(command="gdb ./challenge")
-2. set_breakpoint(location="main")
-3. send_gdb_command(command="run")
-4. send_gdb_command(command="r < input.txt")
-5. read_registers()                    # 结构化寄存器字典
-6. read_memory(address="$rsp", count=32)  # 结构化内存
-7. backtrace()                         # 结构化调用栈
-8. disassemble(address="$rip")         # 结构化反汇编
-9. evaluate(expression="'A'*8")        # 结构化表达式求值
-10. set_watchpoint(expression="rbp-8", kind="write")
+ 1. detect_gdb()                          # 查看系统上可用的 GDB
+ 2. start_debugging()                     # 自动选用最佳 GDB
+ 3. set_breakpoint(location="main")
+ 4. send_gdb_command(command="run")
+ 5. send_gdb_command(command="r < input.txt")
+ 6. read_registers()                      # 结构化寄存器字典
+ 7. read_memory(address="$rsp", count=32) # 结构化内存
+ 8. backtrace()                           # 结构化调用栈
+ 9. disassemble(address="$rip")           # 结构化反汇编
+10. evaluate(expression="'A'*8")          # 结构化表达式求值
+11. set_watchpoint(expression="rbp-8", kind="write")
 ```
 
 ## 项目结构
