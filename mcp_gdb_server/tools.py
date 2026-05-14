@@ -51,8 +51,22 @@ def register_tools(mcp: FastMCP, gdb: GDBManager) -> None:
     @mcp.tool()
     @_wrap
     def stop_debugging() -> str:
-        """Terminate the current GDB debugging session."""
+        """Terminate the debugged program and close the GDB session.
+
+        Use this to fully stop. For remote debugging, if you want the
+        remote process to keep running, use ``detach_debugging`` instead.
+        """
         return gdb.stop()
+
+    @mcp.tool()
+    @_wrap
+    def detach_debugging() -> str:
+        """Detach GDB from the debugged program, letting it continue running.
+
+        Only meaningful for remote debugging (target remote / attach pid).
+        The remote/inferior process keeps running after GDB exits.
+        """
+        return gdb.detach()
 
     @mcp.tool()
     @_wrap

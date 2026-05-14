@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"f:/python/mcp-gdb-server\" log --oneline -20)"
+    ]
+  }
+}

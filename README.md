@@ -131,7 +131,8 @@ sudo ./uninstall_service.sh
 | `detect_gdb` | 探测系统上可用的 GDB 二进制 |
 | `send_gdb_command` | 向 GDB 发送原始命令或向程序输入 |
 | `interrupt` | 中断正在运行的程序 |
-| `stop_debugging` | 终止 GDB 会话 |
+| `stop_debugging` | 终止程序并退出 GDB |
+| `detach_debugging` | 仅退出 GDB，远程目标程序继续运行 |
 
 ### 断点管理
 

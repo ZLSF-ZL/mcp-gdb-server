@@ -102,10 +102,27 @@ class GDBManager:
             return f"Failed to start GDB: {str(e)}"
 
     def stop(self) -> str:
+        """Terminate the inferior program and close GDB."""
+        if self.is_running:
+            self._run("kill")
+            self._run("quit")
         if self._child:
             self._child.close()
             self._child = None
-        return "GDB Session ended."
+        return "Program killed and GDB session ended."
+
+    def detach(self) -> str:
+        """Detach GDB from the inferior, letting it continue running, then close GDB.
+
+        Only meaningful for remote debugging (target remote / attach pid).
+        """
+        if self.is_running:
+            self._run("detach")
+            self._run("quit")
+        if self._child:
+            self._child.close()
+            self._child = None
+        return "GDB detached. Remote process continues running."
 
     def interrupt(self) -> str:
         if not self.is_running:
