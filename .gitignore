@@ -25,4 +25,7 @@ logs/
 .env
 
 # claude
-.claude/
+.claude
+
+# gitignore
+.gitignore
