@@ -22,18 +22,18 @@
 pip install -r requirements.txt
 
 # 开发模式启动（单文件入口，推荐）
-python mcp_gdb_server.py
+python3 mcp_gdb_server.py
 
 # 指定端口
-python mcp_gdb_server.py 9000
+python3 mcp_gdb_server.py 9000
 
 # 或通过环境变量指定地址
-MCP_HOST=127.0.0.1 MCP_PORT=9000 python mcp_gdb_server.py
+MCP_HOST=127.0.0.1 MCP_PORT=9000 python3 mcp_gdb_server.py
 ```
 
 服务器默认在 `http://0.0.0.0:8000` 监听 SSE 传输。
 
-> 也可以通过包模式启动（效果相同）：`python -m mcp_gdb_server`
+> 也可以通过包模式启动（效果相同）：`python3 -m mcp_gdb_server`
 
 ## 客户端配置
 
@@ -59,7 +59,7 @@ MCP_HOST=127.0.0.1 MCP_PORT=9000 python mcp_gdb_server.py
 ```json
 {
   "type": "stdio",
-  "command": "python",
+  "command": "python3",
   "args": ["mcp_gdb_server.py", "--transport", "stdio"]
 }
 ```
@@ -79,13 +79,13 @@ pip install pyinstaller
 
 ```bash
 # 生产编译（单文件、strip）
-python build.py
+python3 build.py
 
 # Debug 编译（目录模式，保留调试信息）
-python build.py --debug
+python3 build.py --debug
 
 # 清理缓存后编译
-python build.py --clean
+python3 build.py --clean
 ```
 
 编译产物为 `dist/mcp_gdb_server`。
@@ -200,8 +200,8 @@ mcp-gdb-server/
 │   ├── __init__.py            # FastMCP 应用创建与组件装配
 │   ├── manager.py             # GDBManager — GDB 进程管理
 │   ├── tools.py               # MCP 工具注册
-│   └── __main__.py            # 入口点 (python -m mcp_gdb_server)
-├── run.py                     # PyInstaller 编译入口
+│   └── __main__.py            # 入口点 (python3 -m mcp_gdb_server)
+├── mcp_gdb_server.py          # CLI 入口 / PyInstaller 编译入口
 ├── build.py                   # PyInstaller 编译脚本
 ├── mcp-gdb-server.service     # systemd 服务单元
 ├── install_service.sh         # 服务一键安装

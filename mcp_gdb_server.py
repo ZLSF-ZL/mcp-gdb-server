@@ -2,7 +2,7 @@
 """MCP GDB Server — CLI entry point.
 
 作为 mcp_gdb_server 包的独立入口，与 python -m mcp_gdb_server 功能相同。
-不影响 mcp_gdb_server/ 目录中各文件的结构和后续修改。
+也作为 PyInstaller 打包的入口（见 build.py）。
 
 Usage:
     python mcp_gdb_server.py

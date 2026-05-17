@@ -51,7 +51,7 @@ def build(debug: bool = False, clean: bool = False) -> Path:
         cmd.append("--onefile")
         cmd.append("--strip")
 
-    cmd.append(str(ROOT / "run.py"))
+    cmd.append(str(ROOT / "mcp_gdb_server.py"))
 
     print("==> Building mcp_gdb_server ...")
     subprocess.run(cmd, check=True, cwd=ROOT)
