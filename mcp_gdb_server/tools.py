@@ -34,6 +34,9 @@ def register_tools(mcp: FastMCP, gdb: GDBManager) -> None:
 
         When *command* is empty, auto-detects the best available GDB
         (gdb-multiarch > gdb).  Use ``detect_gdb`` to list what's found.
+
+        Only one GDB session can run at a time. Calling this while a
+        session is active will close the existing one first.
         """
         if not command.strip():
             command = gdb.pick_gdb()

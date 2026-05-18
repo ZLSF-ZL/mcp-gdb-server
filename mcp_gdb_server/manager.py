@@ -53,7 +53,7 @@ class GDBManager:
     def detect_gdb() -> dict[str, str]:
         """Probe the system PATH for available GDB binaries."""
         found: dict[str, str] = {}
-        for name in ["gdb-multiarch", "gdb", "pwndbg", "gef", "peda"]:
+        for name in ["gdb-multiarch", "gdb"]:
             path = shutil.which(name)
             if path:
                 found[name] = path
